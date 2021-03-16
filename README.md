@@ -1,4 +1,7 @@
 # CS329S-project
+What it is:
+
+A demonstration of commercial ad creation (FB, Instagram, Google ad campaigns etc). This work uses two custom datasets (commercial ads scraped from moat.com and non-commercial images by Unsplash). The pipeline takes company name and informal product description as input, and generates suitable ad taglines with GPT-3. From there, the tagline is used to semantically search moat.com database for examples of similar commercial images. These images (alongside with tagline) are then used to semantically search Unsplash image databaset to produce the final ad version.
 
 Requires: 
 1. moat images dataset unzipped into directory ./moat-images/moat_full_imgs/
