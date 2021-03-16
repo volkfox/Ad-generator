@@ -6,6 +6,7 @@ import pandas as pd
 #import urllib.parse
 #import urllib.request
 from urllib.request import urlopen
+from urllib.request import HTTPError
 import requests
 import json
 import re
