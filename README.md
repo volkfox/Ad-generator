@@ -7,14 +7,12 @@ Requires:
 1. moat images dataset unzipped into directory ./moat-images/moat_full_imgs/
 https://moat-dataset.s3-us-west-2.amazonaws.com/moat_full_imgs.zip
 
-3. supplementary microservices running with IP addresses known to streamlit app:
+3. supplementary REST microservices running with IP addresses known to streamlit app:
 
 
 https://github.com/volkfox/moat-search
 
-
 https://github.com/volkfox/unsplash-search
-
 
 https://github.com/volkfox/GPT3-gen
 
