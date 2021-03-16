@@ -93,7 +93,7 @@ if (product_input != product_template and desc_input != desc_template):
 
    # download unsplash material
    templates = st.text("Searching Unsplash for royalty-free images...")
-   unsplash_ids = load_unsplash_images(tagline, moat_selected, 4)   
+   unsplash_ids = load_unsplash_images(product_input+" "+tagline, moat_selected, 4)   
    unsplash_image_urls = [ f"https://unsplash.com/photos/{photo_id}" for photo_id in unsplash_ids]
 
    unsplash_images = []
