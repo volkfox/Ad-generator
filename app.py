@@ -94,7 +94,15 @@ if (product_input != product_template and desc_input != desc_template):
    templates = st.text("Searching Unsplash for royalty-free images...")
    unsplash_ids = load_unsplash_images(tagline, moat_selected, 4)   
    unsplash_image_urls = [ f"https://unsplash.com/photos/{photo_id}/download?w=640" for photo_id in unsplash_ids]
-   unsplash_images = [Image.open(urlopen(url)) for url in unsplash_image_urls]
+
+   unsplash_images = []
+   for url in unsplash_image_urls:
+      try:
+         unsplash_images.append(Image.open(urlopen(url)))
+      except HTTPError:
+         st.write(f':sunglasses: Unsplash image {url} was removed')
+
+   #unsplash_images = [Image.open(urlopen(url)) for url in unsplash_image_urls]
 
    # convert images to editable format
    editable_images = [ ImageDraw.Draw(my_image) for my_image in unsplash_images]
