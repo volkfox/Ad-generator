@@ -38,7 +38,7 @@ def load_gpt3_taglines (product, desc):
    list1 = [nl(tagline) for tagline in data]              # remove /n     
    list2 = [sl(tagline) for tagline in list1]             # remove leftover words    
    list3 = [re.sub(r'^ *- *', '', i) for i in list2 if i] # remove empty strings, dashes
-   return Sorting(list3)                       # prefer shorter lines
+   return Sorting(list3)                                  # prefer shorter lines
 
 @st.cache
 def load_moat_images (tagline, num=3):
@@ -76,13 +76,13 @@ if (product_input != product_template and desc_input != desc_template):
    tagline_candidate = st.radio("Choose a tagline to find matching images:", data)
   
    tagline = st.text_input("Edit the tagline: ", tagline_candidate)
+
    # display moat images
    moat_image_indices = load_moat_images(tagline, 4)    
    image_filenames = [ prefix+index+postfix for index in moat_image_indices]
    commercial = st.text("Loading commercial images similar to tagline...")
    moat_images = [ Image.open(filename).convert('RGB') for filename in image_filenames ] 
    moat_captions = moat_image_indices
-   #st.image(moat_images, caption=moat_captions)
    for index, image in enumerate(moat_images):
       st.image(image, caption=moat_captions[index])
    commercial.text("CLIP semantic search results for commercial images:")
@@ -96,10 +96,15 @@ if (product_input != product_template and desc_input != desc_template):
    unsplash_image_urls = [ f"https://unsplash.com/photos/{photo_id}/download?w=640" for photo_id in unsplash_ids]
    unsplash_images = [Image.open(urlopen(url)) for url in unsplash_image_urls]
 
-   # tag font
+   # convert images to editable format
    editable_images = [ ImageDraw.Draw(my_image) for my_image in unsplash_images]
 
+   # for every image collect parameters and render
+   # note caching will not work well here
+
    for index, image in enumerate(editable_images):
+
+      # order: color, size, x, y
       col1, col2, col3, col4 = st.beta_columns(4)
       width, height = unsplash_images[index].size
       with col1:
@@ -108,13 +113,12 @@ if (product_input != product_template and desc_input != desc_template):
          font_size = st.slider("Font size:", min_value=10, max_value=100, value=20,key=str(index))
       with col3:
          x = st.slider("X coordinate:", min_value=0, max_value=width, value=15,key=str(index))
-
       with col4:
          y = st.slider("Y coordinate:", min_value=0, max_value=height, value=15,key=str(index))
+      # render
       tag_font = ImageFont.truetype('fonts/Roboto-Light.ttf', font_size)
       image.text((x,y), tagline, fill=color, font=tag_font) 
       st.image(unsplash_images[index])
    
-
-
+   # all done
    templates.text("Loaded Unsplash images.")
