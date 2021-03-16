@@ -18,12 +18,12 @@ https://github.com/volkfox/unsplash-search
 
 https://github.com/volkfox/GPT3-gen
 
-Run:
+**Run:**
 ```
 streamlit run app.py
 ````
 
-How to use the app:
+**How to use the app:**
 
 ```
 1. Point your browser to Streamlit URL, e.g.: 
