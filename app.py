@@ -11,11 +11,12 @@ import json
 import re
 from PIL import Image, ImageFont, ImageDraw 
 
+# Parameters
 tag_url = 'http://gpt-gen:8000/api'
 moat_url = 'http://moat-search:8000/api'
 unsplash_url = 'http://unsplash-search:8000/api'
-
-prefix = "./moat-images/moat_full_imgs/"
+resolution = '/download?w=640'
+moat_prefix = "./moat-images/moat_full_imgs/"
 postfix = ".png"
 
 # return a list of taglines
@@ -79,7 +80,7 @@ if (product_input != product_template and desc_input != desc_template):
 
    # display moat images
    moat_image_indices = load_moat_images(tagline, 4)    
-   image_filenames = [ prefix+index+postfix for index in moat_image_indices]
+   image_filenames = [ moat_prefix+index+postfix for index in moat_image_indices]
    commercial = st.text("Loading commercial images similar to tagline...")
    moat_images = [ Image.open(filename).convert('RGB') for filename in image_filenames ] 
    moat_captions = moat_image_indices
@@ -93,12 +94,12 @@ if (product_input != product_template and desc_input != desc_template):
    # download unsplash material
    templates = st.text("Searching Unsplash for royalty-free images...")
    unsplash_ids = load_unsplash_images(tagline, moat_selected, 4)   
-   unsplash_image_urls = [ f"https://unsplash.com/photos/{photo_id}/download?w=640" for photo_id in unsplash_ids]
+   unsplash_image_urls = [ f"https://unsplash.com/photos/{photo_id}" for photo_id in unsplash_ids]
 
    unsplash_images = []
    for url in unsplash_image_urls:
       try:
-         unsplash_images.append(Image.open(urlopen(url)))
+         unsplash_images.append(Image.open(urlopen(url+resolution)))
       except HTTPError:
          st.write(f':sunglasses: Unsplash image {url} was removed')
 
