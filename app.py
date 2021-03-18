@@ -60,17 +60,23 @@ def load_unsplash_images (tagline, moat_selected=[], num=3):
 
 # Main Program
 
-st.title('CS329S commercial ad generator')
+st.title('Commercial ad generator')
 
-product_template = ("Bad Brothers Coffee")
-product_input = st.text_input("Enter product name", product_template)
+product_template = ""
+product_input = st.text_input("Type product name, e.g. 'Bad Brothers Coffee.' and press ENTER", product_template)
 
-desc_template = "Coffee sustainably grown in Costa Rica and roasted in our barn in Seattle"
-desc_input = st.text_area("Enter product description", desc_template) 
+desc_template = ""
+desc_input = st.text_area("Give one product description sentence, e.g. 'Coffee sustainably grown and roasted in our barn in Seattle.' and press CMD-ENTER", desc_template) 
 
 
 if (product_input != product_template and desc_input != desc_template):
-
+   
+   # enforce dots to prevent runoff
+   if product_input[-1] != ".":
+      product_input = product_input+"."
+  
+   if desc_input[-1] != ".":
+      desc_input = desc_input+"."
    # generate and select tagline
    waiting = st.text("Loading taglines...")
    data = load_gpt3_taglines(product_input, desc_input) 
@@ -80,7 +86,7 @@ if (product_input != product_template and desc_input != desc_template):
    tagline = st.text_input("Edit the tagline: ", tagline_candidate)
 
    # display moat images
-   moat_image_indices = load_moat_images(tagline, 4)    
+   moat_image_indices = load_moat_images(tagline, 4)+load_moat_images(desc_input, 4)   
    image_filenames = [ moat_prefix+index+postfix for index in moat_image_indices]
    commercial = st.text("Loading commercial images similar to tagline...")
    moat_images = [ Image.open(filename).convert('RGB') for filename in image_filenames ] 
